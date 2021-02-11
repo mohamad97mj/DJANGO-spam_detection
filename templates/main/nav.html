@@ -1,0 +1,14 @@
+{% extends "main/base.html" %}
+
+
+{% block navbar %}
+    <li class="">
+        <a title="چک بیو" href="{% url 'main:check' %}?format=html">check bio</a>
+    </li>
+
+    <li class="">
+        <a title="تگ بیو" href="{% url 'main:tag' %}?format=html">tag bio</a>
+    </li>
+
+{% endblock navbar%}
+{% block content %}{% endblock content%}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+{% load static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mojahed api</title>
+    <link rel="stylesheet" href="{% static 'main/style.css' %}">
+
+</head>
+<body id="bootstrap-overwrite">
+{% block navbar %}
+{% endblock %}
+{% block content %}
+{% endblock content %}
+</body>
+</html>

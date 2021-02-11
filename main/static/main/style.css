@@ -1,0 +1,15 @@
+.myform {
+    text-align: right;
+    margin: 40px auto 0 auto;
+    direction: rtl;
+    width: 500px;
+}
+
+#bootstrap-overwrite .error-message {
+    margin-top: 3px;
+
+    color: #e31e30;
+    display: block;
+    font-size: 10px;
+    font-weight: bold;
+}

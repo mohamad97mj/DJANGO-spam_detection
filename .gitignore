@@ -1,0 +1,7 @@
+/.idea
+*.pyc
+/venv
+/main/filters/fasttext_filter/generated_src/
+/main/filters/fasttext_filter/outputs/
+/main/migrations
+

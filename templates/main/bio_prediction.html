@@ -1,0 +1,59 @@
+{% extends "main/nav.html" %}
+{% load widget_tweaks %}
+{% load static %}
+
+
+{% block content %}
+    <div class="block-content">
+
+        <h4 class="text-center">فرم چک بیو</h4>
+        <form id="login-form" class="myform" method="post" action="{% url 'main:check' %}?format=html">
+            {% csrf_token %}
+
+            {% for hidden in bio_prediction_form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+
+            {% with field=bio_prediction_form.text %}
+                <div class="form-group">
+
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field|add_class:'form-control' }}
+                    <span class="help- help-message" id="{{ field.auto_id }}_help_text">{{ field.help_text }}</span>
+                    {% for error in field.errors %}
+                        <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endwith %}
+
+            <div class="text-center">
+                <button type="submit" name="btn" class="btn btn-primary text-center">
+                    بررسی
+                </button>
+            </div>
+
+        </form>
+
+        <form class="myform">
+
+            {% with field=bio_prediction_form.predicted_label %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field|add_class:'form-control' }}
+                    <span class="help- help-message" id="{{ field.auto_id }}_help_text">{{ field.help_text }}</span>
+                </div>
+            {% endwith %}
+
+            {% with field=bio_prediction_form.probability %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field|add_class:'form-control' }}
+                    <span class="help- help-message" id="{{ field.auto_id }}_help_text">{{ field.help_text }}</span>
+                </div>
+            {% endwith %}
+        </form>
+
+        <script>
+        </script>
+    </div>
+{% endblock %}
