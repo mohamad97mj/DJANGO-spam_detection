@@ -6,13 +6,17 @@ Settings.do_the_prerequisites()
 
 class FasttextFilter():
 
+    def __init__(self):
+        self.bio_model = Model()
+
     def train(self):
-        bio_model = Model(rebuild_model=True)
-        # bio_model.load_model()
-        bio_model.test()
-        bio_model.predict_all()
-        bio_model.save_results()
+        self.bio_model.train_supervised(auto=True, save=True)
+        self.bio_model.test()
+        self.bio_model.predict_all()
+        self.bio_model.save_results()
 
     def load(self):
-        bio_model = Model(rebuild_model=False)
-        return bio_model
+        self.bio_model.load_model()
+
+    def predict(self, text):
+        return self.bio_model.predict(text)

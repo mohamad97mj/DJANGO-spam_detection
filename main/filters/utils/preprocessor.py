@@ -5,11 +5,11 @@ import emoji
 
 
 class Preprocessor:
-    normalizer = Normalizer()
-    stemmer = Stemmer()
-    lemmatizer = Lemmatizer()
-    tokenizer = WordTokenizer()
-    stop_words = stopwords_list()
+    _normalizer = Normalizer()
+    _stemmer = Stemmer()
+    _lemmatizer = Lemmatizer()
+    _tokenizer = WordTokenizer()
+    _stop_words = stopwords_list()
 
     @staticmethod
     def remove_noise(text: str) -> str:
@@ -17,7 +17,7 @@ class Preprocessor:
 
     @staticmethod
     def remove_stop_words(tokens: List) -> str:
-        return [t for t in tokens if t not in Preprocessor.stop_words]
+        return [t for t in tokens if t not in Preprocessor._stop_words]
 
     @staticmethod
     def __remove_emojis(text: str):
@@ -53,19 +53,19 @@ class Preprocessor:
 
     @staticmethod
     def normalize(text: str) -> str:
-        return Preprocessor.normalizer.normalize(text)
+        return Preprocessor._normalizer.normalize(text)
 
     @staticmethod
     def stem(word: str) -> str:
-        return Preprocessor.stemmer.stem(word)
+        return Preprocessor._stemmer.stem(word)
 
     @staticmethod
     def lemmatize(word: str) -> str:
-        return Preprocessor.lemmatizer.lemmatize(word)
+        return Preprocessor._lemmatizer.lemmatize(word)
 
     @staticmethod
-    def tokenize(text: str) -> str:
-        return Preprocessor.tokenizer.tokenize(text)
+    def tokenize(text: str) -> List:
+        return Preprocessor._tokenizer.tokenize(text)
 
     @staticmethod
     def preprocess(text: str) -> str:

@@ -2,9 +2,8 @@ from .utils import *
 
 
 class Tag(Model):
-    id = CharField(max_length=255, primary_key=True)
     text = CharField(max_length=1023)
-    label = CharField(max_length=255)
+    label = CharField(max_length=255, choices=Labels.choices, default=Labels.APPROPRIATE)
 
     def __str__(self):
         return self.text

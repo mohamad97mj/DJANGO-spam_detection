@@ -23,7 +23,7 @@ class PandasUtils:
         return series.sample(frac=1)
 
     @staticmethod
-    def select_series(df: DataFrame, col_name: str) -> Series:
+    def select_series_by_column_name(df: DataFrame, col_name: str) -> Series:
         return df[col_name]
 
     @staticmethod

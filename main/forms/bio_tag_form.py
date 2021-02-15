@@ -5,11 +5,18 @@ class BioTagForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['text'].required = False
+        self.fields['label'].required = False
 
     def clean_text(self):
         text = self.cleaned_data.get("text")
         empty_field_validator(text)
-        self.fields['text'].required = False
+        return text
+
+    def clean_label(self):
+        label = self.cleaned_data.get("label")
+        empty_field_validator(label)
+        return label
 
     def save(self, commit=True):
         m = super(BioTagForm, self).save(commit=False)

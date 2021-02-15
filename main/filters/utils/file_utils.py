@@ -22,7 +22,7 @@ class FileUtils:
         return data
 
     @staticmethod
-    def read_excel_file(file_path: str, encoding: str = default_encoding):
+    def read_excel_file(file_path: str, encoding: str = default_encoding) -> pd.DataFrame:
         Logger.info('Reading excel file {}'.format(file_path))
         dfs = pd.read_excel(file_path, header=0)
         return dfs

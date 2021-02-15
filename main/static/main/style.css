@@ -7,9 +7,16 @@
 
 #bootstrap-overwrite .error-message {
     margin-top: 3px;
-
     color: #e31e30;
     display: block;
     font-size: 10px;
+    font-weight: bold;
+}
+
+#bootstrap-overwrite .success-message {
+    margin-top: 3px;
+    color: #30c91e;
+    display: block;
+    font-size: 20px;
     font-weight: bold;
 }

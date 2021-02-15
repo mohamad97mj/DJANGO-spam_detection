@@ -5,7 +5,7 @@ import os
 
 class Settings:
     class DIRECTORY(Enum):
-        RESOURCE_DIR = 'main/filters/fasttext_filter/resources/'
+        RESOURCE_DIR = 'main/filters/resources/'
         OUTPUTS_DIR = 'main/filters/fasttext_filter/outputs/'
         GENERATED_SRC_DIR = 'main/filters/fasttext_filter/generated_src/'
 

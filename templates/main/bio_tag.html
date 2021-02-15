@@ -8,11 +8,11 @@
         <form method="post" id="login-form" class="myform general-form" action="">
             {% csrf_token %}
 
-            {% for hidden in tag_bio_form.hidden_fields %}
+            {% for hidden in bio_tag_form.hidden_fields %}
                 {{ hidden }}
             {% endfor %}
 
-            {% for field in tag_bio_form.visible_fields %}
+            {% for field in bio_tag_form.visible_fields %}
                 <div class="form-group">
 
                     <label for="{{ field.id_for_label }}">{{ field.label }}</label>
@@ -26,14 +26,18 @@
 
 
             <div class="text-center">
-                <button type="button" name="btn" value="Submit" data-target="#confirm-submit"
+                <button type="submit" name="btn" value="Submit" data-target="#confirm-submit"
                         class="btn btn-primary text-center">
                     ثبت
                 </button>
             </div>
 
+            {% if submitted %}
+                <h5 class="success-message">
+                    تگ مورد نظر ثبت شد
+                </h5>
+            {% endif %}
         </form>
-
         <script>
         </script>
     </div>

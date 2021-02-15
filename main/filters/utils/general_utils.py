@@ -1,3 +1,6 @@
+from enum import Enum
+
+
 class GeneralUtils:
 
     @staticmethod
@@ -52,3 +55,9 @@ class GeneralUtils:
             return 0
 
         return sorted(mylist, key=cmp_to_key(acmp))
+
+
+class ColNames(Enum):
+    BIO = 'bio'
+
+
