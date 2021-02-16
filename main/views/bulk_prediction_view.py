@@ -31,20 +31,15 @@ class BulkPredictionView(APIView):
             return render(request, 'main/bio_bulk_prediction.html', context)
 
         elif format == 'json':
-            serializer = BioPredictionSerializer(data=data)
+            serializer = SingleFileSerializer(request.POST, request.FILES)
             if serializer.is_valid():
-                text = serializer.data['text']
-                prediction = filter_handler.predict(text)
-                data['predicted_label'] = prediction.get('predicted_label')
-                data['probability'] = prediction.get('probability')
-                data['status'] = 'ok'
-                data['detail'] = 'text predicted successfully'
-                return Response(data, status=status.HTTP_200_OK)
+                file = request.FILES['file']
+                filter_handler.bulk_predict(file)
+                prediction_file = open('media/predictions.xlsx', 'rb')
+                response = HttpResponse(prediction_file, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+                response['Content-Disposition'] = 'attachment; filename="%s"' % 'predictions.xlsx'
+                return response
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-def handle_uploaded_file(f):
-    with open('main/filters/resources/bios2test.xlsx', 'wb+') as destination:
-        for chunk in f.chunks():
-            destination.write(chunk)

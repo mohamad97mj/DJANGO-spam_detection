@@ -32,10 +32,10 @@
                 </button>
             </div>
 
-            {% if submitted %}
-                <h5 class="success-message">
-                    تگ مورد نظر ثبت شد
-                </h5>
+            {% if status == 'ok' %}
+                <a class="" href="{{ MEDIA_URL }}predictions.xlsx">
+                    برای دانلود قایل نتیجه پیش بینی کلیک کنید!
+                </a>
             {% endif %}
         </form>
         <script>

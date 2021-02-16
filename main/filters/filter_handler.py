@@ -35,20 +35,20 @@ class FilterHandler():
         text = Preprocessor.preprocess(text)
         result.update(self.primary_filter.predict(text))
         if result['predicted_label'] == Labels.INAPPROPRIATE.value:
-            Logger.info("predicted by primary filter")
+            # Logger.info("predicted by primary filter")
             result.update({'predicted_by': 'primary_filter'})
             return result
 
         if use_api:
             result.update(self.api_filter.predict(text))
             if result['predicted_label'] == Labels.INAPPROPRIATE.value:
-                Logger.info("predicted by api filter")
+                # Logger.info("predicted by api filter")
                 result.update({'predicted_by': 'api_filter'})
                 return result
         if use_fasttext:
             result.update(self.fasttext_filter.predict(text))
 
-        Logger.info("predicted by fasttext filter")
+        # Logger.info("predicted by fasttext filter")
         result.update({'predicted_by': 'fasttext_filter'})
         return result
 
@@ -62,6 +62,5 @@ class FilterHandler():
         for t in texts_df['bio']:
             predictions.append(self.predict(t))
 
-        FileUtils.write_list_of_dicts_2excel_file(predictions, 'outputs/test.xlsx',
+        FileUtils.write_list_of_dicts_2excel_file(predictions, 'outputs/predictions.xlsx',
                                                   headers=['text', 'predicted_label', 'probability', 'predicted_by'])
-        return predictions
