@@ -1,6 +1,7 @@
 import requests
 import json
 from enum import Enum
+from main.filters.utils import *
 
 
 # from main.filters.utils import Labels
@@ -35,6 +36,7 @@ class ApiFilter:
         return response.text  # return utfReverse(response.text.encode("utf-8"))
 
     def predict(self, text):
+        Logger.info("predicting using api filter")
         url = self.base_url + "TextRefinement/SwearWordTagger"
         text = U'"{}"'.format(text)
         payload = text
@@ -48,9 +50,8 @@ class ApiFilter:
 
         return {
             'predicted_label': predicted_label,
-            'probability': 1
+            'probability': '1'
         }
-
 
 # f = ApiFilter()
 # texts = [

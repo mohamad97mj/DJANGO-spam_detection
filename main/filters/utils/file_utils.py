@@ -39,9 +39,9 @@ class FileUtils:
         np.savetxt(file_path, series.values, fmt=fmt, encoding=encoding)
 
     @staticmethod
-    def write_lists2excel_file(items: List, path: str, headers: List = None):
+    def write_list_of_dicts_2excel_file(items: List[dict], path: str, headers: List = None):
         # Create a workbook and add a worksheet.
-
+        headers = headers or items[0].keys()
         workbook = xlsxwriter.Workbook(path)
         worksheet = workbook.add_worksheet()
 
@@ -49,15 +49,14 @@ class FileUtils:
             worksheet.write(0, i, headers[i])
 
         # Some data we want to write to the worksheet.
-
         # Start from the first cell. Rows and columns are zero indexed.
         row = 1
         col = 0
 
         # Iterate over the data and write it out row by row.
         for item in items:
-            for i in range(len(item)):
-                worksheet.write(row, col + i, item[i])
+            for j in range(len(item)):
+                worksheet.write(row, col + j, item[headers[j]])
             row += 1
 
         workbook.close()

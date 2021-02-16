@@ -1,5 +1,6 @@
 from main.filters.fasttext_filter.model import Model
 from main.filters.fasttext_filter.settings import Settings
+from main.filters.utils import *
 
 Settings.do_the_prerequisites()
 
@@ -19,4 +20,5 @@ class FasttextFilter():
         self.bio_model.load_model()
 
     def predict(self, text):
+        Logger.info("Predicting using fasttext model ...")
         return self.bio_model.predict(text)

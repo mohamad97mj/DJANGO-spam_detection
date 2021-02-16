@@ -4,22 +4,22 @@
 
 {% block content %}
     <div class="block-content">
-        <h4 class="text-center">فرم تگ بیو</h4>
-        <form method="post" id="login-form" class="myform general-form" action="">
+        <h4 class="text-center">فرم بررسی انبوه بیو</h4>
+        <form method="post" id="login-form" enctype="multipart/form-data" class="myform general-form" action="">
             {% csrf_token %}
 
-            {% for hidden in bio_tag_form.hidden_fields %}
+            {% for hidden in bio_bulk_prediction_form.hidden_fields %}
                 {{ hidden }}
             {% endfor %}
 
-            {% for field in bio_tag_form.visible_fields %}
+            {% for field in bio_bulk_prediction_form.visible_fields %}
                 <div class="form-group">
 
                     <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                     {{ field|add_class:'form-control' }}
                     <span class="help- help-message" id="{{ field.auto_id }}_help_text">{{ field.help_text }}</span>
                     {% for error in field.errors %}
-                        <span class="error-message">{{ error }}</span>
+                        <span class="help- error-message">{{ error }}</span>
                     {% endfor %}
                 </div>
             {% endfor %}
@@ -28,14 +28,14 @@
             <div class="text-center">
                 <button type="submit" name="btn" value="Submit" data-target="#confirm-submit"
                         class="btn btn-primary text-center">
-                    ثبت
+                    ارسال
                 </button>
             </div>
 
             {% if submitted %}
-                <h6 class="success-message">
-                    * تگ مورد نظر ثبت شد!
-                </h6>
+                <h5 class="success-message">
+                    تگ مورد نظر ثبت شد
+                </h5>
             {% endif %}
         </form>
         <script>

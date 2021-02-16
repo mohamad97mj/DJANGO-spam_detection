@@ -1,4 +1,4 @@
-from main.filters.utils import FileUtils, SettingsUtils, Labels, Preprocessor
+from main.filters.utils import *
 from main.filters.primary_filter.primary_filter import PrimaryFilter
 from main.filters.api_filter.api_filter import ApiFilter
 from main.filters.fasttext_filter.fasttext_filter import FasttextFilter
@@ -31,16 +31,37 @@ class FilterHandler():
         self.fasttext_filter.load()
 
     def predict(self, text, use_api=True, use_fasttext=True):
+        result = {'text': text}
         text = Preprocessor.preprocess(text)
-
-        result = self.primary_filter.predict(text)
+        result.update(self.primary_filter.predict(text))
         if result['predicted_label'] == Labels.INAPPROPRIATE.value:
+            Logger.info("predicted by primary filter")
+            result.update({'predicted_by': 'primary_filter'})
             return result
 
         if use_api:
-            result = self.api_filter.predict(text)
+            result.update(self.api_filter.predict(text))
             if result['predicted_label'] == Labels.INAPPROPRIATE.value:
+                Logger.info("predicted by api filter")
+                result.update({'predicted_by': 'api_filter'})
                 return result
         if use_fasttext:
-            result = self.fasttext_filter.predict(text)
+            result.update(self.fasttext_filter.predict(text))
+
+        Logger.info("predicted by fasttext filter")
+        result.update({'predicted_by': 'fasttext_filter'})
         return result
+
+    def test(self, file, use_api=True, use_fasttext=True):
+        df = FileUtils.read_excel_file(file)
+        print("hello")
+
+    def bulk_predict(self, file, use_api=True, use_fasttext=True):
+        predictions = []
+        texts_df = FileUtils.read_excel_file(file)
+        for t in texts_df['bio']:
+            predictions.append(self.predict(t))
+
+        FileUtils.write_list_of_dicts_2excel_file(predictions, 'outputs/test.xlsx',
+                                                  headers=['text', 'predicted_label', 'probability', 'predicted_by'])
+        return predictions

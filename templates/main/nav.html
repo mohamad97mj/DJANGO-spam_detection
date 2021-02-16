@@ -3,11 +3,20 @@
 
 {% block navbar %}
     <li class="">
-        <a title="چک بیو" href="{% url 'main:check' %}?format=html">check bio</a>
+        <a title="بررسی بیو" href="{% url 'main:predict' %}?format=html">predict bio</a>
+    </li>
+
+    <li class="">
+        <a title="بررسی انبوه" href="{% url 'main:bulk_predict' %}?format=html">bulk predict bio</a>
     </li>
 
     <li class="">
         <a title="تگ بیو" href="{% url 'main:tag' %}?format=html">tag bio</a>
+    </li>
+
+
+    <li class="">
+        <a title="تست فیلتر" href="{% url 'main:test' %}?format=html">test filter</a>
     </li>
 
 {% endblock navbar%}

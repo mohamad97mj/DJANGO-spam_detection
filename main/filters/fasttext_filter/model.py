@@ -135,13 +135,12 @@ class Model:
         Logger.info(self.model.test(self.bio_test_path))
 
     def predict(self, bio: str):
-        Logger.info("Predicting using model ...")
         prediction = self.model.predict(bio)
         predicted_label = Labels.APPROPRIATE.value if prediction[0][0] == '__label__{}'.format(
-            Labels.APPROPRIATE.value) else Label.INAPPROPRIATE.value
+            Labels.APPROPRIATE.value) else Labels.INAPPROPRIATE.value
         formatted_prediction = {
             'predicted_label': predicted_label,
-            'probability': prediction[1][0]
+            'probability': str(format(prediction[1][0]))
         }
         return formatted_prediction
 

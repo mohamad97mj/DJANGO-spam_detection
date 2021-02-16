@@ -7,8 +7,10 @@ from . import views
 app_name = 'main'
 
 urlpatterns = [
-    path('check', views.PredictView.as_view(), name='check'),
+    path('predict', views.PredictionView.as_view(), name='predict'),
+    path('bulk-predict', views.BulkPredictionView.as_view(), name='bulk_predict'),
     path('tag', views.TagView.as_view(), name='tag'),
+    path('test', views.TestView.as_view(), name='test'),
     path('train-model', views.TrainModelView.as_view(), name='train_model'),
     path('load-model', views.LoadModelView.as_view(), name='load_model'),
 ]

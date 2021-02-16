@@ -5,6 +5,7 @@ class Prediction(Model):
     text = CharField(max_length=1023)
     predicted_label = CharField(max_length=255)
     probability = IntegerField()
+    predicted_by = CharField(max_length=255)
 
     def __str__(self):
         return self.text

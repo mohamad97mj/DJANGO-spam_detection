@@ -1,5 +1,5 @@
 # word based filter
-from main.filters.utils import FileUtils, Labels
+from main.filters.utils import *
 from main.filters.utils.preprocessor import Preprocessor
 from os import path
 
@@ -26,17 +26,23 @@ class PrimaryFilter():
         self.__read_filter_list()
 
     def predict(self, text):
+        Logger.info("predicting using primary filter")
+        tokenized = Preprocessor.tokenize(text)
+        predicted = False
         for c in self.filter_list:
             for w in c:
-                if str(w) in Preprocessor.tokenize(text):
+                if str(w) in tokenized:
                     predicted_label = Labels.INAPPROPRIATE.value
+                    predicted = True
                     break
-            else:
-                predicted_label = Labels.APPROPRIATE.value
+            if predicted:
+                break
+        else:
+            predicted_label = Labels.APPROPRIATE.value
 
         formatted_prediction = {
             'predicted_label': predicted_label,
-            'probability': 1
+            'probability': '1'
         }
 
         return formatted_prediction

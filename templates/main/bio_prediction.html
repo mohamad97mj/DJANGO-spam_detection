@@ -6,8 +6,8 @@
 {% block content %}
     <div class="block-content">
 
-        <h4 class="text-center">فرم چک بیو</h4>
-        <form id="login-form" class="myform" method="post" action="{% url 'main:check' %}?format=html">
+        <h4 class="text-center">فرم بررسی بیو</h4>
+        <form id="login-form" class="myform" method="post" action="{% url 'main:predict' %}?format=html">
             {% csrf_token %}
 
             {% for hidden in bio_prediction_form.hidden_fields %}
@@ -51,6 +51,15 @@
                     <span class="help- help-message" id="{{ field.auto_id }}_help_text">{{ field.help_text }}</span>
                 </div>
             {% endwith %}
+
+            {% with field=bio_prediction_form.predicted_by %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field|add_class:'form-control' }}
+                    <span class="help- help-message" id="{{ field.auto_id }}_help_text">{{ field.help_text }}</span>
+                </div>
+            {% endwith %}
+
         </form>
 
         <script>

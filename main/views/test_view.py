@@ -1,35 +1,33 @@
 from .utils import *
 
 
-class PredictionView(APIView):
+class TestView(APIView):
     renderer_classes = (renderers.JSONRenderer, renderers.TemplateHTMLRenderer,)
 
     def get(self, request, format=None):
         format = request.accepted_renderer.format
         if format == 'html':
-            bio_prediction_form = BioPredictionForm()
+            bio_test_form = BioTestForm()
             context = {
-                'bio_prediction_form': bio_prediction_form
+                'bio_test_form': bio_test_form
             }
-            return render(request, 'main/bio_prediction.html', context)
+            return render(request, 'main/bio_test.html', context)
 
     def post(self, request, format=None):
         format = request.accepted_renderer.format
-        data = request.data
         if format == 'html':
-            bio_prediction_form = BioPredictionForm(data=data)
-            is_valid = bio_prediction_form.is_valid()
-            context = {
-                'bio_prediction_form': bio_prediction_form,
-            }
+            bio_test_form = BioTestForm(request.POST, request.FILES)
+            is_valid = bio_test_form.is_valid()
             if is_valid:
-                text = bio_prediction_form.cleaned_data.get('text')
-                prediction = filter_handler.predict(text)
-                bio_prediction_form.init_predicted_label(prediction.get('predicted_label'))
-                bio_prediction_form.init_probability(prediction.get('probability'))
-                bio_prediction_form.init_predicted_by(prediction.get('predicted_by'))
+                file = request.FILES['file']
 
-            return render(request, 'main/bio_prediction.html', context)
+                filter_handler.test(file)
+                # df =
+
+            context = {
+                'bio_test_form': bio_test_form,
+            }
+            return render(request, 'main/bio_test.html', context)
 
         elif format == 'json':
             serializer = BioPredictionSerializer(data=data)
@@ -38,9 +36,14 @@ class PredictionView(APIView):
                 prediction = filter_handler.predict(text)
                 data['predicted_label'] = prediction.get('predicted_label')
                 data['probability'] = prediction.get('probability')
-                data['predicted'] = prediction.get('predicted_by')
                 data['status'] = 'ok'
                 data['detail'] = 'text predicted successfully'
                 return Response(data, status=status.HTTP_200_OK)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+def handle_uploaded_file(f):
+    with open('main/filters/resources/bios2test.xlsx', 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
