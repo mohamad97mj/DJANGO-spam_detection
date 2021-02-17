@@ -5,13 +5,13 @@ class BioTagForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['text'].required = False
+        self.fields['bio'].required = False
         self.fields['label'].required = False
 
-    def clean_text(self):
-        text = self.cleaned_data.get("text")
-        empty_field_validator(text)
-        return text
+    def clean_bio(self):
+        bio = self.cleaned_data.get("bio")
+        empty_field_validator(bio)
+        return bio
 
     def clean_label(self):
         label = self.cleaned_data.get("label")
@@ -27,15 +27,15 @@ class BioTagForm(ModelForm):
     class Meta:
         model = Tag
         fields = [
-            'text',
+            'bio',
             'label',
         ]
         labels = {
-            'text': "متن مورد نظر",
-            'label': 'بر چسب',
+            'bio': "bio",
+            'label': 'label',
         }
         help_texts = {
         }
         widgets = {
-            'text': Textarea(attrs={'cols': 80, 'rows': 5}),
+            'bio': Textarea(attrs={'cols': 80, 'rows': 3}),
         }

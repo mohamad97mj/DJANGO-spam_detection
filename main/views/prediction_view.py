@@ -23,8 +23,8 @@ class PredictionView(APIView):
                 'bio_prediction_form': bio_prediction_form,
             }
             if is_valid:
-                text = bio_prediction_form.cleaned_data.get('text')
-                prediction = filter_handler.predict(text)
+                bio = bio_prediction_form.cleaned_data.get('bio')
+                prediction = filter_handler.predict(bio)
                 bio_prediction_form.init_predicted_label(prediction.get('predicted_label'))
                 bio_prediction_form.init_probability(prediction.get('probability'))
                 bio_prediction_form.init_predicted_by(prediction.get('predicted_by'))
@@ -34,13 +34,13 @@ class PredictionView(APIView):
         elif format == 'json':
             serializer = BioPredictionSerializer(data=data)
             if serializer.is_valid():
-                text = serializer.data['text']
-                prediction = filter_handler.predict(text)
+                bio = serializer.data['bio']
+                prediction = filter_handler.predict(bio)
                 data['predicted_label'] = prediction.get('predicted_label')
                 data['probability'] = prediction.get('probability')
-                data['predicted'] = prediction.get('predicted_by')
+                data['predicted_by'] = prediction.get('predicted_by')
                 data['status'] = 'ok'
-                data['detail'] = 'text predicted successfully'
+                data['detail'] = 'bio predicted successfully'
                 return Response(data, status=status.HTTP_200_OK)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

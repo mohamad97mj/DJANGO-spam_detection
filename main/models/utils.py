@@ -3,8 +3,8 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Labels(TextChoices):
-    APPROPRIATE = "appropriate", _('مناسب')
-    INAPPROPRIATE = "inappropriate", _('نامناسب')
+    APPROPRIATE = "appropriate", _('appropriate')
+    INAPPROPRIATE = "inappropriate", _('inappropriate')
 
 # def init_from_json(self, args, kwargs):
 #     for key in args[0]:

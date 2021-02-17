@@ -25,9 +25,9 @@ class PrimaryFilter():
         self.filter_list = []
         self.__read_filter_list()
 
-    def predict(self, text):
+    def predict(self, bio):
         Logger.info("predicting using primary filter")
-        tokenized = Preprocessor.tokenize(text)
+        tokenized = Preprocessor.tokenize(bio)
         predicted = False
         for c in self.filter_list:
             for w in c:

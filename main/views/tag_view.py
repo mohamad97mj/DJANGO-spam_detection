@@ -7,7 +7,7 @@ class TagView(APIView):
     def get(self, request, format=None):
         format = request.accepted_renderer.format
         if format == 'html':
-            bio_tag_form = forms.BioTagForm()
+            bio_tag_form = BioTagForm()
             context = {
                 'bio_tag_form': bio_tag_form
             }
@@ -40,7 +40,7 @@ class TagView(APIView):
             if serializer.is_valid():
                 serializer.save()
                 data['status'] = 'ok'
-                data['detail'] = 'tag saved successfully'
+                data['detail'] = 'bio tagged successfully'
                 return Response(data, status=status.HTTP_200_OK)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -17,33 +17,25 @@ class TestView(APIView):
         format = request.accepted_renderer.format
         if format == 'html':
             bio_test_form = BioTestForm(request.POST, request.FILES)
-            is_valid = bio_test_form.is_valid()
-            if is_valid:
-                file = request.FILES['file']
-
-                filter_handler.test(file)
-                # df =
-
             context = {
                 'bio_test_form': bio_test_form,
             }
+            if bio_test_form.is_valid():
+                file = request.FILES['file']
+                test_results = filter_handler.test(file)
             return render(request, 'main/bio_test.html', context)
 
         elif format == 'json':
             serializer = BioPredictionSerializer(data=data)
             if serializer.is_valid():
-                text = serializer.data['text']
-                prediction = filter_handler.predict(text)
-                data['predicted_label'] = prediction.get('predicted_label')
-                data['probability'] = prediction.get('probability')
+                bio = serializer.data['bio']
+                test = filter_handler.test(bio)
+                data['precision'] = test.get('precision')
+                data['recall'] = test.get('recall')
                 data['status'] = 'ok'
-                data['detail'] = 'text predicted successfully'
+                data['detail'] = 'filter tested successfully'
                 return Response(data, status=status.HTTP_200_OK)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-def handle_uploaded_file(f):
-    with open('main/filters/resources/bios2test.xlsx', 'wb+') as destination:
-        for chunk in f.chunks():
-            destination.write(chunk)

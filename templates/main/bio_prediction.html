@@ -6,7 +6,7 @@
 {% block content %}
     <div class="block-content">
 
-        <h4 class="text-center">فرم بررسی بیو</h4>
+        <h4 class="text-center">bio prediction form</h4>
         <form id="login-form" class="myform" method="post" action="{% url 'main:predict' %}?format=html">
             {% csrf_token %}
 
@@ -14,7 +14,7 @@
                 {{ hidden }}
             {% endfor %}
 
-            {% with field=bio_prediction_form.text %}
+            {% with field=bio_prediction_form.bio %}
                 <div class="form-group">
 
                     <label for="{{ field.id_for_label }}">{{ field.label }}</label>
@@ -28,7 +28,7 @@
 
             <div class="text-center">
                 <button type="submit" name="btn" class="btn btn-primary text-center">
-                    بررسی
+                    predict
                 </button>
             </div>
 

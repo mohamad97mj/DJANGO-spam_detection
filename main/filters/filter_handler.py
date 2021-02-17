@@ -2,6 +2,7 @@ from main.filters.utils import *
 from main.filters.primary_filter.primary_filter import PrimaryFilter
 from main.filters.api_filter.api_filter import ApiFilter
 from main.filters.fasttext_filter.fasttext_filter import FasttextFilter
+import requests
 
 
 class FilterHandler():
@@ -30,37 +31,62 @@ class FilterHandler():
     def load_fasttext_model(self):
         self.fasttext_filter.load()
 
-    def predict(self, text, use_api=True, use_fasttext=True):
-        result = {'text': text}
-        text = Preprocessor.preprocess(text)
-        result.update(self.primary_filter.predict(text))
+    def predict(self, bio, use_api=True, use_fasttext=True):
+        result = {'bio': bio}
+        bio = Preprocessor.preprocess(bio)
+        result.update(self.primary_filter.predict(bio))
         if result['predicted_label'] == Labels.INAPPROPRIATE.value:
             # Logger.info("predicted by primary filter")
             result.update({'predicted_by': 'primary_filter'})
             return result
 
         if use_api:
-            result.update(self.api_filter.predict(text))
-            if result['predicted_label'] == Labels.INAPPROPRIATE.value:
-                # Logger.info("predicted by api filter")
-                result.update({'predicted_by': 'api_filter'})
-                return result
+            response = self.api_filter.predict(bio)
+            if response:
+                result.update(response)
+                if result['predicted_label'] == Labels.INAPPROPRIATE.value:
+                    # Logger.info("predicted by api filter")
+                    result.update({'predicted_by': 'api_filter'})
+                    return result
+
+            else:
+                Logger.warn("Failed to use api filter")
+
         if use_fasttext:
-            result.update(self.fasttext_filter.predict(text))
+            result.update(self.fasttext_filter.predict(bio))
 
         # Logger.info("predicted by fasttext filter")
         result.update({'predicted_by': 'fasttext_filter'})
         return result
 
     def test(self, file, use_api=True, use_fasttext=True):
-        df = FileUtils.read_excel_file(file)
-        print("hello")
+        tp = tn = fp = fn = 0
+        texts_df = FileUtils.read_excel_file(file)
+        for index, row in texts_df.iterrows():
+            predicted_label = self.predict(row['bio'])['predicted_label']
+            label = row['label']
+            if predicted_label == 'appropriate':
+                if label == 'appropriate':
+                    tp += 1
+                else:
+                    fp += 1
+            else:
+                if label == 'appropriate':
+                    fn += 1
+                else:
+                    tn += 1
+            precision = tp / tp + fp
+            recall = tp / tp + fn
+            return {
+                'precision': precision,
+                'recall': recall,
+            }
 
     def bulk_predict(self, file, use_api=True, use_fasttext=True):
         predictions = []
-        texts_df = FileUtils.read_excel_file(file)
-        for t in texts_df['bio']:
+        bios_df = FileUtils.read_excel_file(file)
+        for t in bios_df['bio']:
             predictions.append(self.predict(t))
 
-        FileUtils.write_list_of_dicts_2excel_file(predictions, 'outputs/predictions.xlsx',
-                                                  headers=['text', 'predicted_label', 'probability', 'predicted_by'])
+        FileUtils.write_list_of_dicts_2excel_file(predictions, 'media/predictions.xlsx',
+                                                  headers=['bio', 'predicted_label', 'probability', 'predicted_by'])
