@@ -7,6 +7,7 @@ from main.filters.utils import FileUtils, Logger, PandasUtils, GeneralUtils, Lab
 from main.filters.utils.preprocessor import Preprocessor
 from os import path
 from enum import Enum
+from main.dao.dao import *
 
 
 class Model:
@@ -21,6 +22,9 @@ class Model:
 
         self.model = None
         self.predictions = []
+        self.appropriate_bios = None
+        self.inappropriate_bios = None
+        self.tags = None
         model_exists = path.exists(self.model_path)
 
         if not model_exists:
@@ -30,6 +34,8 @@ class Model:
 
     def __do_prerequisites(self, number_of_appropriate_bios_records: int = 2000, number_of_training_records: int = 2115,
                            number_of_test_records: int = 0):
+
+        # load from files
         self.number_of_appropriate_bios_records = number_of_appropriate_bios_records
         self.inappropriate_bios = PandasUtils.select_series_by_column_name(
             FileUtils.read_excel_file(self.inappropriate_bios_path),
@@ -44,26 +50,19 @@ class Model:
             self.bios.head(self.number_of_appropriate_bios_records),
             ColNames.BIO.value)
 
+        # load from data base
+        tmp = list(load_tags())
+        labeled_tags_list = [self.__add_label(t.bio, t.label) for t in tmp]
+        self.tags = pd.Series(labeled_tags_list)
+
         self.__generate_training_and_test_series()
-        Logger.info(
-            "Number of appropriate labeled bios records is : {}".format(self.number_of_appropriate_bios_records))
-        Logger.info(
-            "Number of inappropriate labeled bios records is : {}".format(self.number_of_inappropriate_bios_records))
-        Logger.info("Number of training_records is : {}".format(self.number_of_training_records))
-        Logger.info("Number of test records is : {}".format(self.number_of_test_records))
 
-    def __preprocess_appropriate_bios(self):
-        self.appropriate_bios = PandasUtils.apply_function2series(self.appropriate_bios, Preprocessor.preprocess)
-        self.__add_appropriate_label()
-
-    def __preprocess_inappropriate_bios(self):
-        self.inappropriate_bios = PandasUtils.apply_function2series(self.inappropriate_bios, Preprocessor.preprocess)
-        self.__add_inappropriate_label()
-
-    def __preprocess_bios(self):
+    def __preprocess_file_bios(self):
         Logger.info("Preprocessing bios ...")
-        self.__preprocess_appropriate_bios()
-        self.__preprocess_inappropriate_bios()
+        self.appropriate_bios = PandasUtils.apply_function2series(self.appropriate_bios, Preprocessor.preprocess)
+        self.inappropriate_bios = PandasUtils.apply_function2series(self.inappropriate_bios, Preprocessor.preprocess)
+        self.appropriate_bios = self.__add_label2series(self.appropriate_bios, Labels.APPROPRIATE.value)
+        self.inappropriate_bios = self.__add_label2series(self.inappropriate_bios, Labels.INAPPROPRIATE.value)
 
     @staticmethod
     def __add_label2dataframe(df: pd.DataFrame, col_name: str, label: str) -> pd.DataFrame:
@@ -78,12 +77,6 @@ class Model:
     def __add_label(text: str, label: str) -> str:
         return '__label__{} '.format(label) + text
 
-    def __add_appropriate_label(self):
-        self.appropriate_bios = self.__add_label2series(self.appropriate_bios, Labels.APPROPRIATE.value)
-
-    def __add_inappropriate_label(self):
-        self.inappropriate_bios = self.__add_label2series(self.inappropriate_bios, Labels.INAPPROPRIATE.value)
-
     @staticmethod
     def __remove_labels(ser: pd.Series, prefixes: List) -> pd.Series:
         for prefix in prefixes:
@@ -97,8 +90,8 @@ class Model:
 
     def __generate_training_and_test_series(self):
         Logger.info("Generating training and test datasets ...")
-        self.__preprocess_bios()
-        concatenated = PandasUtils.concat_series([self.appropriate_bios, self.inappropriate_bios])
+        self.__preprocess_file_bios()
+        concatenated = PandasUtils.concat_series([self.appropriate_bios, self.inappropriate_bios, self.tags])
         shuffled = PandasUtils.shuffle_series(concatenated)
         self.training_series = shuffled.head(self.number_of_training_records)
         self.test_series = shuffled.tail(self.number_of_test_records)
