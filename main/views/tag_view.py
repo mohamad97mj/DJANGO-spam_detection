@@ -26,12 +26,12 @@ class TagView(APIView):
                 instance = bio_tag_form.save(commit=False)
                 instance.save()
                 context.update({
-                    'submitted': True,
+                    'status': 'ok',
                 })
 
             else:
                 context.update(({
-                    'submitted': False,
+                    'status': 'nok',
                 }))
             return render(request, 'main/bio_tag.html', context)
 

@@ -3,21 +3,26 @@
 
 {% block navbar %}
     <li class="">
-        <a title="بررسی بیو" href="{% url 'main:predict' %}?format=html">predict bio</a>
+        <a title="predict bio" href="{% url 'main:predict' %}?format=html">predict bio</a>
     </li>
 
     <li class="">
-        <a title="بررسی انبوه" href="{% url 'main:bulk_predict' %}?format=html">bulk predict bio</a>
+        <a title="bulk predict bio" href="{% url 'main:bulk_predict' %}?format=html">bulk predict bio</a>
     </li>
 
     <li class="">
-        <a title="تگ بیو" href="{% url 'main:tag' %}?format=html">tag bio</a>
+        <a title="tag bio" href="{% url 'main:tag' %}?format=html">tag bio</a>
     </li>
-
 
     <li class="">
-        <a title="تست فیلتر" href="{% url 'main:test' %}?format=html">test filter</a>
+        <a title="bulk tag bio" href="{% url 'main:bulk_tag' %}?format=html">bulk tag bio</a>
     </li>
 
-{% endblock navbar%}
-{% block content %}{% endblock content%}
+    <li class="">
+        <a title="test filter" href="{% url 'main:test' %}?format=html">test filter</a>
+    </li>
+
+
+
+{% endblock navbar %}
+{% block content %}{% endblock content %}

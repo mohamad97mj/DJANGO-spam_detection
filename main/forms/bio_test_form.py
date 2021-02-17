@@ -4,10 +4,17 @@ from .utils import *
 class BioTestForm(ModelForm):
     file = FileField(label="Upload the file of labeled bios")
 
+    field_order = [
+        'file',
+        'precision',
+        'recall',
+    ]
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['precision'].required = False
         self.fields['recall'].required = False
+        self.order_fields(field_order=self.field_order)
 
     def init_precision(self, precision):
         _mutable = self.data._mutable

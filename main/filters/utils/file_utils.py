@@ -24,8 +24,8 @@ class FileUtils:
     @staticmethod
     def read_excel_file(file_path: str, encoding: str = default_encoding) -> pd.DataFrame:
         Logger.info('Reading excel file {}'.format(file_path))
-        dfs = pd.read_excel(file_path, header=0)
-        return dfs
+        df = pd.read_excel(file_path, header=0)
+        return df.dropna()
 
     @staticmethod
     def write_list2file(file_path: str, lst: List, encoding: str = default_encoding):

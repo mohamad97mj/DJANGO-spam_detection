@@ -37,7 +37,7 @@ class FilterHandler():
         result.update(self.primary_filter.predict(bio))
         if result['predicted_label'] == Labels.INAPPROPRIATE.value:
             # Logger.info("predicted by primary filter")
-            result.update({'predicted_by': 'primary_filter'})
+            result.update({'predicted_by': 'primary filter'})
             return result
 
         if use_api:
@@ -46,7 +46,7 @@ class FilterHandler():
                 result.update(response)
                 if result['predicted_label'] == Labels.INAPPROPRIATE.value:
                     # Logger.info("predicted by api filter")
-                    result.update({'predicted_by': 'api_filter'})
+                    result.update({'predicted_by': 'api filter'})
                     return result
 
             else:
@@ -56,7 +56,7 @@ class FilterHandler():
             result.update(self.fasttext_filter.predict(bio))
 
         # Logger.info("predicted by fasttext filter")
-        result.update({'predicted_by': 'fasttext_filter'})
+        result.update({'predicted_by': 'fasttext filter'})
         return result
 
     def test(self, file, use_api=True, use_fasttext=True):

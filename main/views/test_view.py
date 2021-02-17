@@ -23,15 +23,17 @@ class TestView(APIView):
             if bio_test_form.is_valid():
                 file = request.FILES['file']
                 test_results = filter_handler.test(file)
+                bio_test_form.init_precision(test_results.get('precision'))
+                bio_test_form.init_recall(test_results.get('recall'))
             return render(request, 'main/bio_test.html', context)
 
         elif format == 'json':
             serializer = BioPredictionSerializer(data=data)
             if serializer.is_valid():
                 bio = serializer.data['bio']
-                test = filter_handler.test(bio)
-                data['precision'] = test.get('precision')
-                data['recall'] = test.get('recall')
+                test_results = filter_handler.test(bio)
+                data['precision'] = test_results.get('precision')
+                data['recall'] = test_results.get('recall')
                 data['status'] = 'ok'
                 data['detail'] = 'filter tested successfully'
                 return Response(data, status=status.HTTP_200_OK)
