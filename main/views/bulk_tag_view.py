@@ -42,9 +42,12 @@ class BulkTagView(APIView):
                 file = request.FILES['file']
                 tags_df = FileUtils.read_excel_file(file)
                 tag_bios(tags_df)
-                data['status'] = 'ok'
-                data['detail'] = 'bios tagged successfully'
-                return Response(data, status=status.HTTP_200_OK)
+                response = {
+                    'status': 'ok',
+                    'detail': 'bios tagged successfully',
+                }
+
+                return Response(response, status=status.HTTP_200_OK)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
