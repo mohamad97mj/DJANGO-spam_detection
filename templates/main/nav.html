@@ -1,5 +1,7 @@
 {% extends "main/base.html" %}
 
+{% block title %}
+{% endblock title %}
 
 {% block navbar %}
     <li class="">
@@ -22,6 +24,13 @@
         <a title="test filter" href="{% url 'main:test' %}?format=html">test filter</a>
     </li>
 
+    <li class="">
+        <a title="train model" href="{% url 'main:train_model' %}">train model(2 min)</a>
+    </li>
+
+    <li class="">
+        <a title="load model" href="{% url 'main:load_model' %}">load model(manually)</a>
+    </li>
 
 
 {% endblock navbar %}

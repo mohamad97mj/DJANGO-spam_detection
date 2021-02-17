@@ -101,7 +101,7 @@ class Model:
         self.cleaned_test_list = self.__remove_labels(self.test_series,
                                                       ['__label__{}'.format(l.value) for l in Labels]).tolist()
 
-    def train_supervised(self, auto=False, save=False, duration=15):
+    def train_supervised(self, auto=False, save=False, duration=120):
         self.__do_prerequisites()
         Logger.info("Training model ...")
         if auto:
