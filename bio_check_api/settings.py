@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'bio_check_api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'bio_check_app',  # Or path to database file if using sqlite3.
+        'NAME': 'bio_filer_app',  # Or path to database file if using sqlite3.
         'USER': 'postgres',
         'PASSWORD': 'mJ604998',
         'HOST': 'localhost',
