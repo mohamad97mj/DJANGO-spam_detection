@@ -6,3 +6,5 @@
 /main/migrations
 /outputs
 /static
+bio_filter.conf
+bio_filter_app_uwsgi.ini
