@@ -10,5 +10,5 @@ from main.filters.utils import FileUtils
 import os
 
 
-# filter_handler = FilterHandler()
+filter_handler = FilterHandler()
 
