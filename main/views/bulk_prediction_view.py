@@ -25,7 +25,7 @@ class BulkPredictionView(APIView):
                 file = request.FILES['file']
                 filter_handler.bulk_predict(file)
                 context.update({
-                    'status' : 'ok'
+                    'status': 'ok'
                 })
 
             return render(request, 'main/bio_bulk_prediction.html', context)
@@ -36,10 +36,9 @@ class BulkPredictionView(APIView):
                 file = request.FILES['file']
                 filter_handler.bulk_predict(file)
                 prediction_file = open('media/predictions.xlsx', 'rb')
-                response = HttpResponse(prediction_file, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+                response = HttpResponse(prediction_file,
+                                        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
                 response['Content-Disposition'] = 'attachment; filename="%s"' % 'predictions.xlsx'
                 return response
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-

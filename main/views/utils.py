@@ -11,4 +11,3 @@ import os
 
 
 filter_handler = FilterHandler()
-

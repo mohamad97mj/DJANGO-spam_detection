@@ -28,10 +28,11 @@ class TestView(APIView):
             return render(request, 'main/bio_test.html', context)
 
         elif format == 'json':
-            serializer = BioPredictionSerializer(data=data)
+            data = {}
+            serializer = SingleFileSerializer(request.POST, request.FILES)
             if serializer.is_valid():
-                bio = serializer.data['bio']
-                test_results = filter_handler.test(bio)
+                file = request.FILES['file']
+                test_results = filter_handler.test(file)
                 data['precision'] = test_results.get('precision')
                 data['recall'] = test_results.get('recall')
                 data['status'] = 'ok'
